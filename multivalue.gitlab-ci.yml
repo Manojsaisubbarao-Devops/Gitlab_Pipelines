@@ -1,0 +1,47 @@
+# .gitlab-ci.yml
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DEPLOY_ENABLED: "no"  # Default value
+  RUN_TESTS: "yes"      # Default value
+
+build_job:
+  stage: build
+  script:
+    - echo "Building the project..."
+
+test_prompt:
+  stage: test
+  script:
+    - echo "Do you want to run tests? (yes/no):"
+    - |
+      read RUN_TESTS
+      if [ "$RUN_TESTS" != "yes" ] && [ "$RUN_TESTS" != "no" ]; then
+          echo "Invalid choice. Please enter 'yes' or 'no'."
+          exit 1
+      fi
+
+test_job:
+  stage: test
+  script:
+    - if [ "$RUN_TESTS" = "yes" ]; then echo "Running tests..."; else echo "Skipping tests."; fi
+
+deploy_prompt:
+  stage: deploy
+  script:
+    - echo "Do you want to deploy? (yes/no):"
+    - |
+      read DEPLOY_ENABLED
+      if [ "$DEPLOY_ENABLED" != "yes" ] && [ "$DEPLOY_ENABLED" != "no" ]; then
+          echo "Invalid choice. Please enter 'yes' or 'no'."
+          exit 1
+      fi
+
+deploy_job:
+  stage: deploy
+  script:
+    - if [ "$DEPLOY_ENABLED" = "yes" ]; then echo "Deploying..."; else echo "Deployment is disabled."; fi
