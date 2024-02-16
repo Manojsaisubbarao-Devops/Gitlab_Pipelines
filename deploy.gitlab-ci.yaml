@@ -1,0 +1,38 @@
+# .gitlab-ci.yml
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DEPLOY_ENABLED: "no"  # Default value
+
+build_job:
+  stage: build
+  script:
+    - echo "Building the project..."
+
+test_job:
+  stage: test
+  script:
+    - echo "Running tests..."
+
+deploy_job:
+  stage: deploy
+  script:
+    - if [ "$DEPLOY_ENABLED" = "yes" ]; then echo "Deploying..."; else echo "Deployment is disabled."; fi
+
+deploy_prompt:
+  stage: deploy
+  script:
+    - echo "Do you want to deploy? (yes/no):"
+    - read DEPLOY_ENABLED
+
+# Trigger deploy_job only if DEPLOY_ENABLED is set to "yes"
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Deploying..."
+  rules:
+    - if: '$DEPLOY_ENABLED == "yes"'
