@@ -1,0 +1,19 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deployment enabled: $DEPLOY_ENABLED"
+  when: manual
+  allow_failure: false
+  variables:
+    DEPLOY_ENABLED:
+      description: "Enable deployment?"
+      type: boolean
+
+.environment_prompt:
+  script:
+    - echo "$CI_JOB_NAME prompt: $DEPLOY_ENABLED"
+  only:
+    - main
