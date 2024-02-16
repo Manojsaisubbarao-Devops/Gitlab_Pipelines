@@ -1,0 +1,12 @@
+stages:
+  - deploy
+
+variables:
+  DEPLOY_ENABLED: "no"
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deployment enabled: $DEPLOY_ENABLED"
+  when: manual
+  allow_failure: false
